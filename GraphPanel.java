@@ -23,7 +23,7 @@ public class GraphPanel extends JPanel {
     }
 
     private void drawGraph(Graphics g) {
-        int radius = 20; // Raio dos nós
+        int radius = 30; // Raio dos nós
         int centerX = getWidth() / 2;
         int centerY = getHeight() / 2;
         int n = graph.getVertices();
@@ -39,8 +39,14 @@ public class GraphPanel extends JPanel {
         // Desenha as arestas
         g.setColor(Color.BLACK);
         for (int i = 0; i < n; i++) {
-            for (int neighbor : graph.getAdjList()[i]) {
+            for (Edge edge : graph.getAdjList()[i]) { 
+                int neighbor = edge.dest;  
                 g.drawLine(points[i].x, points[i].y, points[neighbor].x, points[neighbor].y);
+
+                int midX = (((points[i].x + points[neighbor].x))/ 2) + 25;
+                int midY = (points[i].y + points[neighbor].y) / 2;
+
+                g.drawString(String.valueOf(edge.weight), midX, midY);
             }
         }
 
@@ -49,7 +55,7 @@ public class GraphPanel extends JPanel {
             g.setColor(nodeColors.get(i)); // Pega a cor atual do nó
             g.fillOval(points[i].x - radius / 2, points[i].y - radius / 2, radius, radius);
             g.setColor(Color.BLACK);
-            g.drawString("V" + i, points[i].x - radius / 4, points[i].y + radius / 4);
+            g.drawString("V " + i, points[i].x - radius / 4, points[i].y + radius / 4);
         }
     }
 

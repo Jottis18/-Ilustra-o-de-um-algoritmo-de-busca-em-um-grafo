@@ -1,20 +1,19 @@
 import java.awt.Color;
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.Stack;
 
-public class BFS {
+public class DFS {
     private Graph graph;
     private GraphPanel panel;
 
-    public BFS(Graph graph, GraphPanel panel) {
+    public DFS(Graph graph, GraphPanel panel) {
         this.graph = graph;
         this.panel = panel;
     }
 
-    public void bfsSearch(int startNode) {
+    public void dfsSearch(int startNode) {
         boolean[] visited = new boolean[graph.getVertices()];
         int[] distances = new int[graph.getVertices()];
-        Queue<Integer> queue = new LinkedList<>();
+        Stack<Integer> stack = new Stack<>();
 
         // Inicializa todas as distâncias como -1 (não visitado)
         for (int i = 0; i < distances.length; i++) {
@@ -24,17 +23,17 @@ public class BFS {
         // Começa pelo nó inicial
         visited[startNode] = true;
         distances[startNode] = 0;
-        queue.add(startNode);
+        stack.push(startNode);
 
         panel.setNodeColor(startNode, Color.RED); // Nó inicial processado em vermelho
         panel.repaint();
 
-        while (!queue.isEmpty()) {
-            int currentNode = queue.poll();
+        while (!stack.isEmpty()) {
+            int currentNode = stack.pop();
 
             panel.setNodeColor(currentNode, Color.GREEN); // Nó processado completamente
             panel.repaint();
-            
+
             // Pausa para visualizar o estado atual
             sleep(1000);
 
@@ -44,7 +43,7 @@ public class BFS {
                 if (!visited[neighbor]) {
                     visited[neighbor] = true;
                     distances[neighbor] = distances[currentNode] + 1; // Atualiza a distância
-                    queue.add(neighbor);
+                    stack.push(neighbor); // Empilha o próximo nó a ser processado
             
                     panel.setNodeColor(neighbor, Color.RED); // Nó sendo processado
                     panel.repaint();
@@ -56,6 +55,7 @@ public class BFS {
                     }
                 }
             }
+            
         }
 
         System.out.println("Distâncias do nó " + startNode + ":");
