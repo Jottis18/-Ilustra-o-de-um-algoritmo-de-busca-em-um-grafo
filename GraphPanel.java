@@ -5,6 +5,9 @@ import javax.swing.*;
 public class GraphPanel extends JPanel {
     private Graph graph;
     private HashMap<Integer, Color> nodeColors;
+    public static final int WIDTH = 600;
+    public static final int HEIGHT = 600;
+
 
     public GraphPanel(Graph graph) {
         this.graph = graph;
@@ -62,5 +65,16 @@ public class GraphPanel extends JPanel {
     // Método para alterar a cor de um nó específico
     public void setNodeColor(int node, Color color) {
         nodeColors.put(node, color);
+    }
+
+    // Método que uma cria uma janela onde sera mostrada o grafo
+    public static void showGraph(GraphPanel graphPanel) {
+        JFrame frame = new JFrame("Visualização do Grafo");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(WIDTH, HEIGHT);
+    
+        frame.add(graphPanel);
+            
+        frame.setVisible(true);
     }
 }

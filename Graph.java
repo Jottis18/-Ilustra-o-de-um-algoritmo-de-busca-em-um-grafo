@@ -16,8 +16,8 @@ public class Graph {
     private int vertices;
     private LinkedList<Edge> adjList[];
 
-    // Construtor
-    public Graph(int vertices) {
+    // Adicioan Vertices
+    public void addVertices(int vertices) {
         this.vertices = vertices;
         adjList = new LinkedList[vertices];
         for (int i = 0; i < vertices; i++) {
