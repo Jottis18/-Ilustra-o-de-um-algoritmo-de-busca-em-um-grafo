@@ -2,21 +2,39 @@ import java.awt.Color;
 import java.util.PriorityQueue;
 import java.util.Comparator;
 
+/**
+ * Classe Dijkstra que implementa o algoritmo de Dijkstra para encontrar 
+ * o caminho mais curto em um grafo ponderado.
+ * A classe também atualiza a interface gráfica, exibindo a visualização 
+ * do processo de busca.
+ */
 public class Dijkstra {
     private Graph graph;
     private GraphPanel panel;
 
+    /**
+     * Construtor da classe Dijkstra.
+     *
+     * @param graph O grafo em que o algoritmo de Dijkstra será executado.
+     * @param panel O painel onde a visualização dos nós será exibida.
+     */
     public Dijkstra(Graph graph, GraphPanel panel) {
         this.graph = graph;
         this.panel = panel;
     }
 
+    /**
+     * Executa o algoritmo de Dijkstra a partir de um nó inicial para calcular
+     * o caminho mais curto até os outros nós do grafo.
+     *
+     * @param startNode O nó inicial para começar o algoritmo.
+     */
     public void dijkstraSearch(int startNode) {
         int vertices = graph.getVertices();
         boolean[] visited = new boolean[vertices];
         int[] distances = new int[vertices];
         
-        // Inicializa as distâncias como infinitas (exceto para o nó inicial)
+        // Inicializa as distâncias como infinitas, exceto para o nó inicial
         for (int i = 0; i < vertices; i++) {
             distances[i] = Integer.MAX_VALUE;
         }
@@ -26,13 +44,15 @@ public class Dijkstra {
         PriorityQueue<Integer> pq = new PriorityQueue<>(Comparator.comparingInt(node -> distances[node]));
         pq.add(startNode);
 
-        panel.setNodeColor(startNode, Color.RED); // Nó inicial processado em vermelho
+        // Colore o nó inicial como vermelho para indicar que foi processado
+        panel.setNodeColor(startNode, Color.RED);
         panel.repaint();
 
+        // Enquanto houver nós na fila de prioridade
         while (!pq.isEmpty()) {
             int currentNode = pq.poll(); // Remove o nó com a menor distância
 
-            // Se o nó já foi visitado, continue
+            // Se o nó já foi visitado, pula para o próximo
             if (visited[currentNode]) {
                 continue;
             }
@@ -41,40 +61,35 @@ public class Dijkstra {
             panel.setNodeColor(currentNode, Color.GREEN); // Nó processado completamente
             panel.repaint();
 
-            // Pausa para visualizar o estado atual
+            // Pausa para visualização
             sleep(1000);
 
+            // Itera sobre os vizinhos do nó atual
             for (Edge edge : graph.getAdjList()[currentNode]) {
                 int neighbor = edge.dest;
-                int weight = edge.weight;
+                int newDist = distances[currentNode] + edge.weight;
 
-                // Se o vizinho não foi visitado e a nova distância é menor, atualize
-                if (!visited[neighbor] && distances[currentNode] + weight < distances[neighbor]) {
-                    distances[neighbor] = distances[currentNode] + weight;
-                    pq.add(neighbor); // Adiciona o vizinho à fila de prioridade
+                // Atualiza a distância se for menor
+                if (newDist < distances[neighbor]) {
+                    distances[neighbor] = newDist;
+                    pq.add(neighbor);
 
-                    panel.setNodeColor(neighbor, Color.RED); // Nó sendo processado
+                    // Colore o vizinho como vermelho (em processamento)
+                    panel.setNodeColor(neighbor, Color.RED);
                     panel.repaint();
-            
-                    try {
-                        Thread.sleep(1000); // Pausa a execução por 1 segundo
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
                 }
             }
         }
-
-        System.out.println("Distâncias do nó " + startNode + ":");
-        for (int i = 0; i < distances.length; i++) {
-            System.out.println("Vértice " + i + ": " + (distances[i] == Integer.MAX_VALUE ? "Infinito" : distances[i]));
-        }
     }
 
-    // Função auxiliar para pausar entre iterações e permitir que a visualização seja atualizada
-    private void sleep(int milliseconds) {
+    /**
+     * Função auxiliar para pausar a execução por um tempo.
+     *
+     * @param millis O tempo de pausa em milissegundos.
+     */
+    private void sleep(int millis) {
         try {
-            Thread.sleep(milliseconds);
+            Thread.sleep(millis);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
