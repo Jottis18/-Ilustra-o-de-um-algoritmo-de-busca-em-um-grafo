@@ -2,13 +2,23 @@ import java.awt.*;
 import java.util.HashMap;
 import javax.swing.*;
 
+/**
+ * A classe GraphPanel é responsável por exibir a visualização do grafo.
+ * Ela gerencia a renderização dos nós e arestas do grafo, assim como a
+ * interação do usuário com o grafo.
+ * Esta classe estende JPanel, sendo um componente gráfico customizado para a
+ * visualização de grafos.
+ */
 public class GraphPanel extends JPanel {
     private Graph graph;
     private HashMap<Integer, Color> nodeColors;
     public static final int WIDTH = 600;
     public static final int HEIGHT = 600;
 
-
+    /**
+     * Construtor da classe GraphPanel.
+     * Inicializa o painel e seus componentes.
+     */
     public GraphPanel(Graph graph) {
         this.graph = graph;
         this.nodeColors = new HashMap<>();
@@ -19,12 +29,26 @@ public class GraphPanel extends JPanel {
         }
     }
 
+    /**
+     * Método responsável por desenhar o grafo no painel.
+     * Este método é chamado automaticamente sempre que o componente precisar ser
+     * redesenhado.
+     * 
+     * @param g o contexto gráfico onde o grafo será desenhado.
+     */
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         drawGraph(g);
     }
 
+    /**
+     * Método privado que desenha o grafo, incluindo seus nós e arestas.
+     * As arestas são desenhadas em preto e os nós são desenhados com cores
+     * dinâmicas.
+     *
+     * @param g o contexto gráfico onde o grafo será desenhado.
+     */
     private void drawGraph(Graphics g) {
         int radius = 30; // Raio dos nós
         int centerX = getWidth() / 2;
@@ -42,11 +66,11 @@ public class GraphPanel extends JPanel {
         // Desenha as arestas
         g.setColor(Color.BLACK);
         for (int i = 0; i < n; i++) {
-            for (Edge edge : graph.getAdjList()[i]) { 
-                int neighbor = edge.dest;  
+            for (Edge edge : graph.getAdjList()[i]) {
+                int neighbor = edge.dest;
                 g.drawLine(points[i].x, points[i].y, points[neighbor].x, points[neighbor].y);
 
-                int midX = (((points[i].x + points[neighbor].x))/ 2) + 25;
+                int midX = (((points[i].x + points[neighbor].x)) / 2) + 25;
                 int midY = (points[i].y + points[neighbor].y) / 2;
 
                 g.drawString(String.valueOf(edge.weight), midX, midY);
@@ -67,14 +91,19 @@ public class GraphPanel extends JPanel {
         nodeColors.put(node, color);
     }
 
-    // Método que uma cria uma janela onde sera mostrada o grafo
+    /**
+     * Método para alterar a cor de um nó específico.
+     *
+     * @param node  O índice do nó cuja cor será alterada.
+     * @param color A nova cor a ser aplicada ao nó.
+     */
     public static void showGraph(GraphPanel graphPanel) {
         JFrame frame = new JFrame("Visualização do Grafo");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(WIDTH, HEIGHT);
-    
+
         frame.add(graphPanel);
-            
+
         frame.setVisible(true);
     }
 }
